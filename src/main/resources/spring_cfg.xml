@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans default-autowire="byName"
+        xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc.xsd">
+
+    <!--spring开启注解-->
+    <context:component-scan base-package="com.sg.ssm"/>
+    <!--加载properties配置文件-->
+    <context:property-placeholder location="classpath:db.properties"/>
+    <!--配置数据源-->
+    <bean id="dataSource" class="org.apache.commons.dbcp.BasicDataSource">
+        <property name="driverClassName" value="${db.driver}"/>
+        <property name="url" value="${db.url}"/>
+        <property name="username" value="${db.username}"/>
+        <property name="password" value="${db.password}"/>
+    </bean>
+    <!--注册sqlSessionFactory-->
+    <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="configLocation" value="classpath:mybatis_cfg.xml"/>
+    </bean>
+    <!--springmvc配置-->
+    <mvc:default-servlet-handler/>
+    <!--<mvc:resources location="/upload/" mapping="/upload/**"></mvc:resources>-->
+    <mvc:annotation-driven/>
+
+    <bean id="irvr" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <!--文件上传-->
+    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+        <!--<property name="defaultEncoding" value=""></property>-->
+        <property name="maxUploadSizePerFile" value="102400000" ></property>
+    </bean>
+
+    <!--自定义转化器-->
+    <!-- 1.准备好转换的工具类，这个工具类必须实现Converter接口 -->
+    <bean id="mydate" class="com.sg.ssm.utils.MyDate"></bean>
+
+    <!--
+        2.准备转换器，并把上一步的工具类纳入转换器中
+     -->
+    <bean id="myconverter" class="org.springframework.format.support.FormattingConversionServiceFactoryBean" >
+        <property name="converters">
+            <set>
+                <ref bean="mydate" />
+            </set>
+        </property>
+    </bean>
+
+    <!-- 3.还需要让转换器起作用 -->
+    <mvc:annotation-driven conversion-service="myconverter" ></mvc:annotation-driven>
+
+</beans>

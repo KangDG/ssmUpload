@@ -1,0 +1,130 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>sn.sg.ssm</groupId>
+  <artifactId>SSMUpload</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>war</packaging>
+  <dependencies>
+	
+		<!--servlet-->
+    <dependency>
+      <groupId>javax.servlet</groupId>
+      <artifactId>servlet-api</artifactId>
+      <version>2.5</version>
+    </dependency>
+
+    <!--mysql-->
+    <dependency>
+      <groupId>mysql</groupId>
+      <artifactId>mysql-connector-java</artifactId>
+      <version>5.1.40</version>
+    </dependency>
+
+    <!--spring-->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-context</artifactId>
+      <version>4.3.12.RELEASE</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-aop</artifactId>
+      <version>4.3.12.RELEASE</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-orm</artifactId>
+      <version>4.3.12.RELEASE</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-tx</artifactId>
+      <version>4.3.12.RELEASE</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-test</artifactId>
+      <version>4.3.12.RELEASE</version>
+    </dependency>
+    <!--springmvc-->
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-web</artifactId>
+      <version>4.3.12.RELEASE</version>
+    </dependency>
+    <dependency>
+      <groupId>org.springframework</groupId>
+      <artifactId>spring-webmvc</artifactId>
+      <version>4.3.12.RELEASE</version>
+    </dependency>
+
+    <!--mybatis-->
+    <dependency>
+      <groupId>org.mybatis</groupId>
+      <artifactId>mybatis</artifactId>
+      <version>3.2.3</version>
+    </dependency>
+    <dependency>
+      <groupId>org.mybatis</groupId>
+      <artifactId>mybatis-spring</artifactId>
+      <version>1.2.2</version>
+    </dependency>
+
+    <!--dbcp/druid/c3p0-->
+    <dependency>
+      <groupId>commons-dbcp</groupId>
+      <artifactId>commons-dbcp</artifactId>
+      <version>1.4</version>
+    </dependency>
+    <dependency>
+      <groupId>commons-pool</groupId>
+      <artifactId>commons-pool</artifactId>
+      <version>1.6</version>
+    </dependency>
+    <!-- 文件上传依赖 -->
+    <dependency>
+      <groupId>commons-fileupload</groupId>
+      <artifactId>commons-fileupload</artifactId>
+      <version>1.3.2</version>
+    </dependency>
+
+  </dependencies>
+  
+  <build>
+		<plugins>
+		
+			<!-- compile插件 -->
+		
+			<!-- 
+				jetty插件，启动方式：jetty:run -Djetty.port=9080
+				如果在这里指定了端口号，也可以不用配置端口号参数
+				如果同时都指定了，那么pom.xml文件优先
+			 -->
+		    <plugin>
+		        <groupId>org.eclipse.jetty</groupId>
+		        <artifactId>jetty-maven-plugin</artifactId>
+		        <version>9.0.0.v20130308</version>
+		        <configuration>
+		        	<!-- 
+		        	configuration.scanIntervalSeconds 配置表示新代码的扫描时间间隔（秒），值 <= 0 表示不扫描。
+		        	这里利用的是jetty 的定时重载代码的特性，做修改后不用重新启动项目，自动扫描出改动后会自动更新class文件的
+		        	 -->
+		            <scanIntervalSeconds>5</scanIntervalSeconds>
+		            <!-- 
+		            	configuration.webApp.contextPath 配置表示工程的虚拟目录名，
+		            	如果配置为/，则届时访问路径为hostname:port/，
+		            	如果配置为/jetty，则届时访问路径为hostname:port/jetty，有点相当于namespace的作用
+		             -->
+		            <webApp>
+		                     <contextPath>/</contextPath>
+		            </webApp>
+		            <connectors>
+		                <connector implementation="org.eclipse.jetty.server.nio.SelectChannelConnector">
+		                    <port>8080</port>
+		                </connector>
+		            </connectors>
+		        </configuration>
+		    </plugin>
+		</plugins>
+	</build>
+</project>
